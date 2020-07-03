@@ -3,29 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package guipowermanagement;
+package application;
 
 import controller.MainController;
-import model.PowerManage;
+import model.PowerManager;
 import view.MainFrame;
 
 /**
  *
  * @author juane
  */
-public class GUIPowerManagement {
+public class MyRemoteControlApplication {
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		MainFrame main_frame = new MainFrame();
-		PowerManage powerManage = new PowerManage();
-		MainController mainController = new MainController(main_frame, powerManage);
+		MainFrame mainFrame = new MainFrame();
+		PowerManager powerManage = new PowerManager();
+		MainController mainController = new MainController(mainFrame, powerManage);
 		
 		mainController.start();
 		
-		main_frame.setVisible(true);
+		mainFrame.setVisible(true);
 	}
 	
 }

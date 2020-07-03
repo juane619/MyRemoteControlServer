@@ -5,144 +5,97 @@
  */
 package controller;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
+
 import javax.swing.AbstractButton;
-import model.PowerManage;
+
+import model.PowerManager;
+import network.ServerThread;
 import view.MainFrame;
 
 /**
  *
  * @author juane
  */
-public class MainController implements ActionListener, ItemListener {
+public class MainController implements ActionListener {
 
-    MainFrame _mainView;
-    PowerManage _powerManage;
-    CardLayout card;
+	MainFrame mainView;
+	PowerManager powerManage;
+	ServerThread serverController;
 
-    public MainController(MainFrame main_frame, PowerManage power_manage) {
-        _mainView = main_frame;
-        _powerManage = power_manage;
-        card = (CardLayout) _mainView.mainPanel1.panel_timer.getLayout();
-    }
+	public MainController(final MainFrame mainFrame, final PowerManager powerManage) {
+		mainView = mainFrame;
+		this.powerManage = powerManage;
+	}
 
-    public void start() {
-        _mainView.setTitle("GUI Power Management");
-        _mainView.setLocationRelativeTo(null);
-        _mainView.mainPanel1.button_run.addActionListener(this);
-        _mainView.mainPanel1.button_cancel.addActionListener(this);
-        _mainView.mainPanel1.rad_count.addItemListener(this);
-        _mainView.mainPanel1.rad_clock.addItemListener(this);
-    }
+	public void start() {
+		mainView.setTitle("GUI Power Management");
+		mainView.setLocationRelativeTo(null);
+		mainView.mainPanel.runButton.addActionListener(this);
+		mainView.mainPanel.cancelButton.addActionListener(this);
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object src = e.getSource();
-        Enumeration<AbstractButton> buttons_opt = _mainView.mainPanel1.buttonGroup_options.getElements();
+		// Start server functions to manage clients connections
+		new ServerThread(mainView).start();
+	}
 
-        if (src == _mainView.mainPanel1.button_run) {
-            String option = "", time = "";
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Object src = e.getSource();
+		final Enumeration<AbstractButton> buttonsOpt = mainView.mainPanel.buttonGroup_options.getElements();
 
-            for (; buttons_opt.hasMoreElements();) {
-                AbstractButton button = buttons_opt.nextElement();
+		if (src == mainView.mainPanel.runButton) {
+			String option = null;
 
-                if (button.isSelected()) {
-                    option = button.getName();
-                }
-            }
+			while (buttonsOpt.hasMoreElements()) {
+				final AbstractButton button = buttonsOpt.nextElement();
 
-            //time
-            if (_mainView.mainPanel1.rad_count.isSelected()) {
-                int hours = Integer.parseInt(_mainView.mainPanel1.getjSpinner_count_h().getValue().toString()) * 3600;
-                int minutes = Integer.parseInt(_mainView.mainPanel1.getjSpinner_count_m().getValue().toString()) * 60;
-                int seconds = Integer.parseInt(_mainView.mainPanel1.getjSpinner_count_s().getValue().toString());
+				if (button.isSelected()) {
+					option = button.getName();
+					break;
+				}
+			}
 
-                time += hours + minutes + seconds;
+			if (option != null) {
+				final String time = getTimeSelected();
 
-                if (null != option) {
-                    switch (option) {
-                        case "poweroff":
-                            _powerManage.powerOff(time);
-                            break;
-                        case "restart":
-                            _powerManage.restart(time);
-                            break;
-                        case "sleep":
-                            _powerManage.sleep(time);
-                            break;
-                        case "lock":
-                            _powerManage.lock(time);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            } else if (_mainView.mainPanel1.rad_clock.isSelected()) {
-                Date timer = (Date) _mainView.mainPanel1.getjSpinner_time().getValue();
-                Date date = (Date) _mainView.mainPanel1.getjSpinner_date().getValue();
+				runSelectedAction(option, time);
+			}
+		} else if (src == mainView.mainPanel.cancelButton) {
+			powerManage.cancel();
+		}
+	}
 
-                date.setHours(timer.getHours());
-                date.setMinutes(timer.getMinutes());
-                
-                long time_aux = (date.getTime() - new Date().getTime())/1000;
+	private void runSelectedAction(final String option, String time) {
+		if (time.contentEquals("0")) {
+			time = "10";
+		}
 
-                if (time_aux <= 0) {
-                    time_aux = 30;
-                    time += time_aux;
-                }else
-                    time += time_aux;
+		switch (option) {
+		case "poweroff":
+			powerManage.powerOff(time);
+			break;
+		case "restart":
+			powerManage.restart(time);
+			break;
+		case "sleep":
+			powerManage.sleep(time);
+			break;
+		case "lock":
+			powerManage.lock(time);
+			break;
+		default:
+			break;
+		}
+	}
 
-                System.out.println(new Date());
-                System.out.println(date);
-                System.out.println(time_aux);
-                //int day
-                if (null != option) {
-                    switch (option) {
-                        case "poweroff":
-                            _powerManage.powerOff(time);
-                            break;
-                        case "restart":
-                            _powerManage.restart(time);
-                            break;
-                        case "sleep":
-                            _powerManage.sleep(time);
-                            break;
-                        case "lock":
-                            _powerManage.lock(time);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
+	private String getTimeSelected() {
+		final int hours = Integer.parseInt(mainView.mainPanel.getjSpinner_count_h()) * 3600;
+		final int minutes = Integer.parseInt(mainView.mainPanel.getjSpinner_count_m()) * 60;
+		final int seconds = Integer.parseInt(mainView.mainPanel.getjSpinner_count_s());
 
-            //_mainView.showError(option);
-        } else if (src == _mainView.mainPanel1.button_cancel) {
-            //_mainView.showError("Cancelando..");
-            _powerManage.cancel();
-        }
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        Object src = e.getSource();
-
-        if (src == _mainView.mainPanel1.rad_count) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                card.show(_mainView.mainPanel1.panel_timer, "card_count");
-            }
-        } else if (src == _mainView.mainPanel1.rad_clock) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                card.show(_mainView.mainPanel1.panel_timer, "card_clock");
-            }
-        }
-    }
+		return String.valueOf(hours + minutes + seconds);
+	}
 
 }

@@ -11,14 +11,14 @@ import java.io.IOException;
  *
  * @author juane
  */
-public class PowerManage {
+public class PowerManager {
 
-    private final Runtime _runtime;
-    private final String _os;
+    private final Runtime runtime;
+    private final String os;
 
-    public PowerManage() {
-        _runtime = Runtime.getRuntime();
-        _os = System.getProperty("os.name").toLowerCase();
+    public PowerManager() {
+        runtime = Runtime.getRuntime();
+        os = System.getProperty("os.name").toLowerCase();
     }
 
     public void powerOff(String minuts) {
@@ -33,7 +33,7 @@ public class PowerManage {
         }
 
         try {
-            _runtime.exec(power_off);
+            runtime.exec(power_off);
         } catch (IOException ex) {
             System.err.println("ERROR!");
         }
@@ -51,7 +51,7 @@ public class PowerManage {
         }
 
         try {
-            _runtime.exec(restart);
+            runtime.exec(restart);
         } catch (IOException ex) {
             System.err.println("ERROR!");
         }
@@ -105,21 +105,21 @@ public class PowerManage {
         }
 
         try {
-            _runtime.exec(cancel);
+            runtime.exec(cancel);
         } catch (IOException ex) {
             System.err.println("ERROR!");
         }
     }
 
     private boolean isWindows() {
-        return (_os.contains("win"));
+        return (os.contains("win"));
     }
 
     private boolean isMac() {
-        return (_os.contains("mac"));
+        return (os.contains("mac"));
     }
 
     private boolean isUnix() {
-        return (_os.contains("nix") || _os.contains("nux") || _os.contains("aix"));
+        return (os.contains("nix") || os.contains("nux") || os.contains("aix"));
     }
 }
