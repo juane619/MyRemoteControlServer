@@ -1,6 +1,3 @@
-# GUI-PowerManagement
-Simple software to shutdown, restart or hibernate the PC (Linux, Windows or MAC).
+# MyRemoteControlServer
 
-Developed using model view controller.
-
-Requisitos: Java.
+Java App (server) to control remotely your computer from your Android device.
