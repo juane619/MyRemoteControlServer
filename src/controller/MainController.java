@@ -13,6 +13,7 @@ import javax.swing.AbstractButton;
 
 import model.PowerManager;
 import network.ServerThread;
+import utils.Constants;
 import view.MainFrame;
 
 /**
@@ -31,7 +32,7 @@ public class MainController implements ActionListener {
 	}
 
 	public void start() {
-		mainView.setTitle("GUI Power Management");
+		mainView.setTitle(Constants.APP_TITLE);
 		mainView.setLocationRelativeTo(null);
 		mainView.mainPanel.runButton.addActionListener(this);
 		mainView.mainPanel.cancelButton.addActionListener(this);
