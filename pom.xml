@@ -17,7 +17,7 @@
 			</resource>
 			<resource>
 				<filtering>true</filtering><!-- if it is neccessary -->
-				<directory>${project.basedir}/libs</directory><!-- from -->
+				<directory>${project.basedir}/mylibs</directory><!-- from -->
 				<targetPath>${project.build.directory}/libs</targetPath><!-- to -->
 				<includes><!-- what -->
 					<include>nircmdc.exe</include>
@@ -61,6 +61,25 @@
 					</archive>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/assembly/zip.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 </project>

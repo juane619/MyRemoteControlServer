@@ -21,7 +21,7 @@ public class Utils {
 		}
 
 		final ProcessBuilder pb = new ProcessBuilder(commandsProcessed);
-		pb.directory(new File("libs"));
+		pb.directory(new File("mylibs"));
 
 		try {
 			pb.start();
