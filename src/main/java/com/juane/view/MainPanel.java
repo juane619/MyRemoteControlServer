@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package view;
+package com.juane.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,6 +32,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
+import com.juane.utils.Utils;
 
 /**
  *
@@ -354,7 +351,7 @@ public class MainPanel extends javax.swing.JPanel {
 			}
 		});
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setIcon(new ImageIcon(MainPanel.class.getResource("/icons/delete_32px.png")));
+		lblNewLabel_1.setIcon(new ImageIcon(Utils.getImage("main/resources/images/delete_32px.png")));
 		buttonClose.add(lblNewLabel_1, BorderLayout.CENTER);
 
 		buttonMaximize = new JPanel();
@@ -380,7 +377,7 @@ public class MainPanel extends javax.swing.JPanel {
 				changeColor(buttonMaximize, new Color(5, 10, 46));
 			}
 		});
-		lblNewLabel_2.setIcon(new ImageIcon(MainPanel.class.getResource("/icons/full_screen_32px.png")));
+		lblNewLabel_2.setIcon(new ImageIcon(Utils.getImage("main/resources/images/full_screen_32px.png")));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		buttonMaximize.add(lblNewLabel_2, BorderLayout.CENTER);
 
@@ -398,7 +395,7 @@ public class MainPanel extends javax.swing.JPanel {
 
 		label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setIcon(new ImageIcon(MainPanel.class.getResource("/icons/settings_32px.png")));
+		label.setIcon(new ImageIcon(Utils.getImage("main/resources/images/settings_32px.png")));
 		panel_1.add(label);
 
 		final JPanel panel_1_1 = new JPanel();
@@ -407,7 +404,7 @@ public class MainPanel extends javax.swing.JPanel {
 		panelLeftIcons.add(panel_1_1);
 
 		label_1 = new JLabel("");
-		label_1.setIcon(new ImageIcon(MainPanel.class.getResource("/icons/info-2-32.png")));
+		label_1.setIcon(new ImageIcon(Utils.getImage("main/resources/images/info-2-32.png")));
 		panel_1_1.add(label_1);
 
 		final DateFormat df = new SimpleDateFormat("d/M/yyyy");
@@ -426,7 +423,8 @@ public class MainPanel extends javax.swing.JPanel {
 			final Point frameLocation = getLocationOnScreen();
 			final Point mouseDifference = new Point(e.getLocationOnScreen().x - firstLocationMouse.x,
 					e.getLocationOnScreen().y - firstLocationMouse.y);
-			final Point finalFrameLocation = new Point(frameLocation.x + mouseDifference.x, frameLocation.y + mouseDifference.y);
+			final Point finalFrameLocation = new Point(frameLocation.x + mouseDifference.x,
+					frameLocation.y + mouseDifference.y);
 			topFrame.setLocation(finalFrameLocation);
 			firstLocationMouse = e.getLocationOnScreen();
 		} else {

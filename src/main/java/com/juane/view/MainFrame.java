@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package com.juane.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,7 +40,7 @@ public class MainFrame extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
 	private void initComponents() {
 
-		mainPanel = new view.MainPanel();
+		mainPanel = new MainPanel();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,7 +67,5 @@ public class MainFrame extends javax.swing.JFrame {
 		JOptionPane.showMessageDialog(this, errMessage);
 	}
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	public view.MainPanel mainPanel;
-	// End of variables declaration//GEN-END:variables
+	public MainPanel mainPanel;
 }
