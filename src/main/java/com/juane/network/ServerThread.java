@@ -1,4 +1,4 @@
-package network;
+package com.juane.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import view.MainFrame;
+import com.juane.view.MainFrame;
 
 public class ServerThread extends Thread {
 	private final Logger LOGGER = Logger.getLogger("Serverthread");

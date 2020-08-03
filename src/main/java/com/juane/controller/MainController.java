@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package com.juane.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,10 +11,10 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 
-import model.PowerManager;
-import network.ServerThread;
-import utils.Constants;
-import view.MainFrame;
+import com.juane.model.PowerManager;
+import com.juane.network.ServerThread;
+import com.juane.utils.Constants;
+import com.juane.view.MainFrame;
 
 /**
  *
