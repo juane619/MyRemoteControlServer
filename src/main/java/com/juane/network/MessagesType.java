@@ -1,4 +1,4 @@
-package network;
+package com.juane.network;
 
 public class MessagesType {
 	public static final int VOLUME_MESSAGE = 0;

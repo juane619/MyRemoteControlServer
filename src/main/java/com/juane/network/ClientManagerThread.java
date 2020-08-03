@@ -1,4 +1,4 @@
-package network;
+package com.juane.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import utils.Utils;
-import view.MainFrame;
+import com.juane.utils.Utils;
+import com.juane.view.MainFrame;
 
 public class ClientManagerThread extends Thread {
 	private static final Logger LOGGER = Logger.getLogger("ClientManagerThread");
