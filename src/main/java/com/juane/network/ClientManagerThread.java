@@ -22,6 +22,10 @@ public class ClientManagerThread extends Thread {
 	MainFrame mainFrame = null;
 	int idClient;
 
+	// right or left down
+	private double multiplier = 1.00;
+	private int times = 10;
+
 	public ClientManagerThread(final Socket socket, final MainFrame mainFrame, final int id) {
 		this.socket = socket;
 		this.mainFrame = mainFrame;
@@ -74,11 +78,28 @@ public class ClientManagerThread extends Thread {
 						break;
 					case MessagesType.KEYLEFT_MESSAGE:
 						// LOGGER.info("Key left message received.");
+						resetMultiplierBackwardForward();
 						Utils.processCommand("nircmdc.exe", "sendkeypress", "left");
 						break;
 					case MessagesType.KEYRIGHT_MESSAGE:
 						// LOGGER.info("Key rigth message received.");
 						Utils.processCommand("nircmdc.exe", "sendkeypress", "right");
+						break;
+					case MessagesType.KEYLEFT_LONG_MESSAGE:
+						// LOGGER.info("Key left message received.");
+						times = calculateTimesKeysDown();
+						do {
+							times--;
+							Utils.processCommand("nircmdc.exe", "sendkey", "left", "down");
+						} while (times > 0);
+						break;
+					case MessagesType.KEYRIGHT_LONG_MESSAGE:
+						// LOGGER.info("Key rigth message received.");
+						times = calculateTimesKeysDown();
+						do {
+							times--;
+							Utils.processCommand("nircmdc.exe", "sendkey", "right", "down");
+						} while (times > 0);
 						break;
 					case MessagesType.KEYSPACE_MESSAGE:
 						// LOGGER.info("Key space message received.");
@@ -107,6 +128,17 @@ public class ClientManagerThread extends Thread {
 			LOGGER.info("Server exception: " + ex.getMessage());
 			ex.printStackTrace();
 		}
+	}
+
+	private void resetMultiplierBackwardForward() {
+		multiplier = 1.0;
+	}
+
+	// TO DO: more complex way of calculate times
+	private int calculateTimesKeysDown() {
+		final int returnTimes = (int) (10 * multiplier);
+		multiplier += 0.20;
+		return returnTimes;
 	}
 
 	private void close() {

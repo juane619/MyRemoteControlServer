@@ -48,6 +48,7 @@ public class MainPanel extends javax.swing.JPanel {
 
 	JFrame topFrame = null;
 	Point firstLocationMouse = null;
+	JLabel lblAutorVersion;
 
 	/**
 	 * Creates new form mainFrame
@@ -231,11 +232,11 @@ public class MainPanel extends javax.swing.JPanel {
 		panel_center.add(panelFooter, BorderLayout.SOUTH);
 		panelFooter.setLayout(new BorderLayout(0, 0));
 
-		final JLabel lblByJuane = new JLabel("BY JuanE");
-		lblByJuane.setBackground(new Color(253, 245, 230));
-		lblByJuane.setHorizontalTextPosition(SwingConstants.RIGHT);
-		lblByJuane.setHorizontalAlignment(SwingConstants.RIGHT);
-		panelFooter.add(lblByJuane);
+		lblAutorVersion = new JLabel("BY JuanE");
+		lblAutorVersion.setBackground(new Color(253, 245, 230));
+		lblAutorVersion.setHorizontalTextPosition(SwingConstants.RIGHT);
+		lblAutorVersion.setHorizontalAlignment(SwingConstants.RIGHT);
+		panelFooter.add(lblAutorVersion);
 
 		panelClients = new JPanel();
 		panelClients.setBackground(new Color(253, 245, 230));
