@@ -83,6 +83,7 @@ public class ClientManagerThread extends Thread {
 						break;
 					case MessagesType.KEYRIGHT_MESSAGE:
 						// LOGGER.info("Key rigth message received.");
+						resetMultiplierBackwardForward();
 						Utils.processCommand("nircmdc.exe", "sendkeypress", "right");
 						break;
 					case MessagesType.KEYLEFT_LONG_MESSAGE:
