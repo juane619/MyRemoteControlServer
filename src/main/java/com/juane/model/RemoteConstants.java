@@ -20,6 +20,6 @@ public class RemoteConstants {
 	public static final String RIGHT_KEY_PARAM = "right";
 	public static final String SPC_KEY_PARAM = "spc";
 	public static final String DOWN_PARAM = "down";
-	public static final String CMD_C_PARAM = "\\c";
+	public static final String CMD_C_PARAM = "/c";
 
 }
