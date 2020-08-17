@@ -11,7 +11,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 
-import com.juane.model.PowerManager;
+import com.juane.manager.PowerManager;
 import com.juane.network.ServerThread;
 import com.juane.utils.Constants;
 import com.juane.view.MainFrame;

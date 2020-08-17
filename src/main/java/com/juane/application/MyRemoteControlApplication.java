@@ -6,7 +6,7 @@
 package com.juane.application;
 
 import com.juane.controller.MainController;
-import com.juane.model.PowerManager;
+import com.juane.manager.PowerManager;
 import com.juane.view.MainFrame;
 
 /**

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import com.juane.manager.ClientManagerThread;
 import com.juane.view.MainFrame;
 
 public class ServerThread extends Thread {

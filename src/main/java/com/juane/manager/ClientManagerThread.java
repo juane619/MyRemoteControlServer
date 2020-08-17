@@ -1,4 +1,4 @@
-package com.juane.network;
+package com.juane.manager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import com.juane.model.MessagesType;
+import com.juane.model.RemoteConstants;
 import com.juane.utils.Utils;
 import com.juane.view.MainFrame;
 
@@ -59,7 +61,7 @@ public class ClientManagerThread extends Thread {
 
 			String text = "";
 
-			writer.println("welcome");
+			writer.println(RemoteConstants.WELCOME_CLIENT_MESSAGE);
 
 			do {
 				if (socket.isConnected()) {
@@ -68,46 +70,47 @@ public class ClientManagerThread extends Thread {
 
 					switch (messageType) {
 					case MessagesType.VOLUME_MESSAGE:
-						// LOGGER.info("Volume message received.");
 						final String volume = text;
 
 						final String realVolume = Utils.parseRawVolumeData(Integer.valueOf(volume));
 
-						Utils.processCommand("nircmdc.exe", "setsysvolume", realVolume);
+						RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+								RemoteConstants.SYSVOLUME_COMMAND, realVolume);
 
 						break;
 					case MessagesType.KEYLEFT_MESSAGE:
-						// LOGGER.info("Key left message received.");
 						resetMultiplierBackwardForward();
-						Utils.processCommand("nircmdc.exe", "sendkeypress", "left");
+						RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+								RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.LEFT_KEY_PARAM);
 						break;
 					case MessagesType.KEYRIGHT_MESSAGE:
-						// LOGGER.info("Key rigth message received.");
 						resetMultiplierBackwardForward();
-						Utils.processCommand("nircmdc.exe", "sendkeypress", "right");
+						RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+								RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.RIGHT_KEY_PARAM);
 						break;
 					case MessagesType.KEYLEFT_LONG_MESSAGE:
-						// LOGGER.info("Key left message received.");
 						times = calculateTimesKeysDown();
 						do {
 							times--;
-							Utils.processCommand("nircmdc.exe", "sendkey", "left", "down");
+							RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+									RemoteConstants.SENDKEY_COMMAND, RemoteConstants.LEFT_KEY_PARAM,
+									RemoteConstants.DOWN_PARAM);
 						} while (times > 0);
 						break;
 					case MessagesType.KEYRIGHT_LONG_MESSAGE:
-						// LOGGER.info("Key rigth message received.");
 						times = calculateTimesKeysDown();
 						do {
 							times--;
-							Utils.processCommand("nircmdc.exe", "sendkey", "right", "down");
+							RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+									RemoteConstants.SENDKEY_COMMAND, RemoteConstants.RIGHT_KEY_PARAM,
+									RemoteConstants.DOWN_PARAM);
 						} while (times > 0);
 						break;
 					case MessagesType.KEYSPACE_MESSAGE:
-						// LOGGER.info("Key space message received.");
-						Utils.processCommand("nircmdc.exe", "sendkeypress", "spc");
+						RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
+								RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.SPC_KEY_PARAM);
 						break;
 					default:
-						// LOGGER.info("Message not recognized!");
 						break;
 					}
 
@@ -120,7 +123,7 @@ public class ClientManagerThread extends Thread {
 				} else {
 					close();
 				}
-			} while (!text.equals("bye") && connected);
+			} while (!text.equals(RemoteConstants.BYE_CLIENT_MESSAGE) && connected);
 
 			socket.close();
 
