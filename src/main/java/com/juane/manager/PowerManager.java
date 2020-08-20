@@ -5,85 +5,89 @@
  */
 package com.juane.manager;
 
-import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
  * @author juane
  */
-public class PowerManager {
+public abstract class PowerManager {
+	private static int interval;
+	private static Timer timer = null;
+	private static boolean running = false;
 
-	private final Runtime runtime;
-	private final String os;
+	public static void powerOff(final String seconds) {
+		if (!running) {
+			String command = "";
 
-	public PowerManager() {
-		runtime = Runtime.getRuntime();
-		os = System.getProperty("os.name").toLowerCase();
-	}
+			if (RemoteCommandProcessManager.isWindows()) {
+				command += "shutdown -s -t " + seconds;
+			} else if (RemoteCommandProcessManager.isUnix()) {
+				command += "shutdown -h " + seconds;
+			} else if (RemoteCommandProcessManager.isMac()) {
+				command += "shutdown -h " + seconds;
+			}
 
-	public void powerOff(final String minuts) {
-		String power_off = "";
-
-		if (isWindows()) {
-			power_off += "shutdown -s -t " + minuts;
-		} else if (isUnix()) {
-			power_off += "shutdown -h " + minuts;
-		} else if (isMac()) {
-			power_off += "shutdown -h " + minuts;
-		}
-
-		try {
-			runtime.exec(power_off);
-		} catch (final IOException ex) {
-			System.err.println("ERROR!");
+			RemoteCommandProcessManager.processCommand(command);
+			running = true;
 		}
 	}
 
-	public void restart(final String minuts) {
-		String restart = "";
-
-		if (isWindows()) {
-			restart += "shutdown -r -t " + minuts;
-		} else if (isUnix()) {
-			restart += "shutdown -r " + minuts;
-		} else if (isMac()) {
-			restart += "shutdown -r " + minuts;
-		}
-
-		try {
-			runtime.exec(restart);
-		} catch (final IOException ex) {
-			System.err.println("ERROR!");
-		}
-	}
-
-	public void sleep(final String minuts) {
-		// String sleep = "";
+	public static void restart(final String seconds) {
+		// String command = "";
 		//
-		// if (isWindows()) {
-		// sleep += "shutdown -h -t " + minuts;
-		// } else if (isUnix()) {
-		// sleep += "timeout /t " + minuts +" && rundll32.exe powrprof.dll,SetSuspendState Sleep";
-		// } else if (isMac()) {
-		// sleep += "shutdown -s " + minuts;
+		// if (RemoteCommandProcessManager.isWindows()) {
+		// command += "shutdown -r -t " + seconds;
+		// } else if (RemoteCommandProcessManager.isUnix()) {
+		// command += "shutdown -r " + seconds;
+		// } else if (RemoteCommandProcessManager.isMac()) {
+		// command += "shutdown -r " + seconds;
 		// }
-		//
+
 		// try {
-		// _runtime.exec(sleep);
-		// } catch (IOException ex) {
-		// System.err.println("ERROR!");
+		// //runtime.exec(command);
+		// } catch (final IOException ex) {
+		// LOGGER.log(Level.SEVERE, "Error exucuting command: " + command);
 		// }
 	}
 
-	public void lock(final String minuts) {
+	public static void sleep(final String seconds) {
+		if (!running) {
+			String command = "";
+
+			if (RemoteCommandProcessManager.isWindows()) {
+				command += "%windir%\\System32\\rundll32.exe powrprof.dll,SetSuspendState Sleep";
+			} else if (RemoteCommandProcessManager.isUnix()) {
+				command += "shutdown -h -t " + seconds;
+			} else if (RemoteCommandProcessManager.isMac()) {
+				command += "shutdown -s " + seconds;
+			}
+
+			final String builtCommand = command;
+			interval = Integer.parseInt(seconds);
+
+			timer = new Timer();
+
+			timer.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					interval = setInterval(builtCommand);
+				}
+			}, 0, 1000);
+			running = true;
+		}
+	}
+
+	public static void lock(final String seconds) {
 		// String lock = "";
 		//
 		// if (isWindows()) {
-		// lock += "shutdown -h -t " + minuts;
+		// lock += "shutdown -h -t " + seconds;
 		// } else if (isUnix()) {
-		// lock += "timeout /t " + minuts +" && rundll32.exe powrprof.dll,SetSuspendState Sleep";
+		// lock += "timeout /t " + seconds +" && rundll32.exe powrprof.dll,SetSuspendState Sleep";
 		// } else if (isMac()) {
-		// lock += "shutdown -s " + minuts;
+		// lock += "shutdown -s " + seconds;
 		// }
 		//
 		// try {
@@ -93,33 +97,37 @@ public class PowerManager {
 		// }
 	}
 
-	public void cancel() {
-		String cancel = "";
+	public static void cancel() {
+		if (running) {
+			String command = "";
 
-		if (isWindows()) {
-			cancel += "shutdown -a";
-		} else if (isUnix()) {
-			cancel += "shutdown -c";
-		} else if (isMac()) {
-			cancel += "shutdown -c";
+			if (RemoteCommandProcessManager.isWindows()) {
+				command += "shutdown -a";
+			} else if (RemoteCommandProcessManager.isUnix()) {
+				command += "shutdown -c";
+			} else if (RemoteCommandProcessManager.isMac()) {
+				command += "shutdown -c";
+			}
+
+			if (timer != null) {
+				timer.cancel();
+			}
+
+			RemoteCommandProcessManager.processCommand(command);
+			running = false;
 		}
+	}
 
-		try {
-			runtime.exec(cancel);
-		} catch (final IOException ex) {
-			System.err.println("ERROR!");
+	private static final int setInterval(final String command) {
+		if (interval == 1) {
+			doTimerAction(command);
+			timer.cancel();
 		}
+		return --interval;
 	}
 
-	private boolean isWindows() {
-		return (os.contains("win"));
+	private static void doTimerAction(final String command) {
+		RemoteCommandProcessManager.processCommand(command);
 	}
 
-	private boolean isMac() {
-		return (os.contains("mac"));
-	}
-
-	private boolean isUnix() {
-		return (os.contains("nix") || os.contains("nux") || os.contains("aix"));
-	}
 }

@@ -15,7 +15,7 @@ import com.juane.view.MainFrame;
 public class ServerThread extends Thread {
 	private final Logger LOGGER = Logger.getLogger("Serverthread");
 
-	final static int PORT = 8787;
+	static final int PORT = 8787;
 
 	ServerSocket serverSocket = null;
 	MainFrame mainFrame = null;
@@ -38,6 +38,7 @@ public class ServerThread extends Thread {
 			serverSocket = new ServerSocket(PORT);
 			LOGGER.info("Server is listening on port " + PORT);
 
+			// update ui
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {

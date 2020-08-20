@@ -9,5 +9,6 @@ public class MessagesType {
 	public static final int KEYLEFT_LONG_MESSAGE = 8;
 	public static final int POWER_OFF_MESSAGE = 9;
 	public static final int SUSPEND_OFF_MESSAGE = 10;
+	public static final int CANCEL_POWER_ACTION_MESSAGE = 11;
 
 }

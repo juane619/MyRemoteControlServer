@@ -13,26 +13,6 @@ public class Utils {
 		return String.valueOf(multiplier * 65535);
 	}
 
-	// public static void processCommand(final String... commands) {
-	// final List<String> commandsProcessed = new ArrayList<String>();
-	// commandsProcessed.add("cmd");
-	// commandsProcessed.add("/c");
-	//
-	// for (final String c : commands) {
-	// commandsProcessed.add(c);
-	// }
-	//
-	// final ProcessBuilder pb = new ProcessBuilder(commandsProcessed);
-	// pb.directory(new File("mylibs"));
-	//
-	// try {
-	// pb.start();
-	// } catch (final IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-
 	public static Image getImage(final String pathAndFileName) {
 		final URL url = Thread.currentThread().getContextClassLoader().getResource(pathAndFileName);
 		return Toolkit.getDefaultToolkit().getImage(url);

@@ -14,6 +14,7 @@ public class RemoteConstants {
 	public static final String KEYPRESS_COMMAND = "sendkeypress";
 	public static final String SENDKEY_COMMAND = "sendkey";
 	public static final String CMD_COMMAND = "cmd";
+	public static final String BASH_COMMAND = "bash";
 
 	// commands parameters
 	public static final String LEFT_KEY_PARAM = "left";
@@ -21,5 +22,6 @@ public class RemoteConstants {
 	public static final String SPC_KEY_PARAM = "spc";
 	public static final String DOWN_PARAM = "down";
 	public static final String CMD_C_PARAM = "/c";
+	public static final String BASH_C_PARAM = "-c";
 
 }
