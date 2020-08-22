@@ -1,0 +1,1 @@
+- See why not disconnect in Server from button Disconnect in Client, only when close the program.

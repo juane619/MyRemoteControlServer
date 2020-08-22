@@ -11,27 +11,21 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import com.juane.model.RemoteConstants;
+import com.juane.model.MessagesType;
 import com.juane.view.MainFrame;
 
 public class ClientManagerThread extends Thread {
 	private static final Logger LOGGER = Logger.getLogger("ClientManagerThread");
 
 	private final Socket socket;
-	private boolean connected = true;
+	private final boolean connected = true;
 	MainFrame mainFrame = null;
-	int idClient;
+	int clientId;
 
 	public ClientManagerThread(final Socket socket, final MainFrame mainFrame, final int id) {
 		this.socket = socket;
 		this.mainFrame = mainFrame;
-		idClient = id;
-	}
-
-	@Override
-	public void interrupt() {
-		LOGGER.info("DISCONNECTED CLIENT!\n");
-		super.interrupt();
+		clientId = id;
 	}
 
 	@Override
@@ -42,7 +36,7 @@ public class ClientManagerThread extends Thread {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					mainFrame.mainPanel.updateGUIaddConnectedClient(idClient,
+					mainFrame.mainPanel.updateGUIaddConnectedClient(clientId,
 							socket.getRemoteSocketAddress().toString());
 				}
 			});
@@ -55,42 +49,58 @@ public class ClientManagerThread extends Thread {
 
 			String dataReceived = "";
 
-			writer.println(RemoteConstants.WELCOME_CLIENT_MESSAGE);
+			// first connection with this client
+			if (writer != null && !writer.checkError()) {
+				writer.write(MessagesType.CONNECT_REQUEST_MESSAGE);
+				writer.println(clientId);
 
+				writer.flush();
+			}
+
+			// Wait messages from client
 			do {
 				if (socket.isConnected()) {
 					final int messageType = reader.read();
+
+					// Android client disconnected not gracefully
+					if (messageType == -1) {
+						break;
+					}
+
 					dataReceived = reader.readLine();
 
-					RemoteCommandProcessManager.processCommand(messageType, dataReceived);
-
-					writer.println("Message of type " + messageType + " received.");
-					if (dataReceived == null) {
-						dataReceived = "";
-						connected = false;
-						close();
+					// Android client disconnected gracefully
+					if (messageType == MessagesType.DISCONNECT_REQUEST_MESSAGE) {
+						break;
 					}
-				} else {
-					close();
+
+					RemoteCommandProcessManager.processCommand(messageType, dataReceived);
+					// writer.println("Message of type " + messageType + " received.");
 				}
-			} while (!dataReceived.equals(RemoteConstants.BYE_CLIENT_MESSAGE) && connected);
+			} while (connected);
 
-			socket.close();
-
-			this.interrupt();
+			close();
 		} catch (final IOException ex) {
 			LOGGER.info("Server exception: " + ex.getMessage());
 			ex.printStackTrace();
+		} finally {
+			LOGGER.info("In finally");
 		}
 	}
 
 	private void close() {
-		LOGGER.info("Client " + Thread.currentThread().getId() + " disconnected.");
+		LOGGER.info("Client " + clientId + " disconnected.");
 
+		try {
+			socket.close();
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				mainFrame.mainPanel.updateGUIremoveConnectedClient(idClient);
+				mainFrame.mainPanel.updateGUIremoveConnectedClient(clientId);
 			}
 		});
 	}

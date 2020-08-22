@@ -14,22 +14,15 @@ import com.juane.view.MainFrame;
 
 public class ServerThread extends Thread {
 	private final Logger LOGGER = Logger.getLogger("Serverthread");
-
 	static final int PORT = 8787;
 
-	ServerSocket serverSocket = null;
-	MainFrame mainFrame = null;
 	public static int clientsConnected = 0;
+
+	private ServerSocket serverSocket = null;
+	private MainFrame mainFrame = null;
 
 	public ServerThread(final MainFrame mainPanel) {
 		mainFrame = mainPanel;
-	}
-
-	@Override
-	public void interrupt() {
-		LOGGER.info("STOPPING SERVER " + this.toString());
-
-		super.interrupt();
 	}
 
 	@Override
