@@ -1,6 +1,7 @@
-## Changelog
+ ## Changelog
 
-### Newest version: 1.1.0
+### Newest version: 2.0.0
+* New way to handle request from client.
 * New controls to manage: long video key press and shutdown/suspend from client.
 
 ### 1.0.0
