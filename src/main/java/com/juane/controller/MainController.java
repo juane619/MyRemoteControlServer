@@ -8,10 +8,11 @@ package com.juane.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 
-import com.juane.model.PowerManager;
+import com.juane.manager.PowerManager;
 import com.juane.network.ServerThread;
 import com.juane.utils.Constants;
 import com.juane.view.MainFrame;
@@ -21,32 +22,31 @@ import com.juane.view.MainFrame;
  * @author juane
  */
 public class MainController implements ActionListener {
+	private final Logger LOGGER = Logger.getLogger("MainController");
 
-	MainFrame mainView;
-	PowerManager powerManage;
+	MainFrame mainFrame;
 	ServerThread serverController;
 
-	public MainController(final MainFrame mainFrame, final PowerManager powerManage) {
-		mainView = mainFrame;
-		this.powerManage = powerManage;
+	public MainController(final MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 	}
 
 	public void start() {
-		mainView.setTitle(Constants.APP_TITLE);
-		mainView.setLocationRelativeTo(null);
-		mainView.mainPanel.runButton.addActionListener(this);
-		mainView.mainPanel.cancelButton.addActionListener(this);
+		mainFrame.setTitle(Constants.APP_TITLE);
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.mainPanel.runButton.addActionListener(this);
+		mainFrame.mainPanel.cancelButton.addActionListener(this);
 
 		// Start server functions to manage clients connections
-		new ServerThread(mainView).start();
+		new ServerThread(mainFrame).start();
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final Object src = e.getSource();
-		final Enumeration<AbstractButton> buttonsOpt = mainView.mainPanel.buttonGroup_options.getElements();
+		final Enumeration<AbstractButton> buttonsOpt = mainFrame.mainPanel.buttonGroup_options.getElements();
 
-		if (src == mainView.mainPanel.runButton) {
+		if (src == mainFrame.mainPanel.runButton) {
 			String option = null;
 
 			while (buttonsOpt.hasMoreElements()) {
@@ -59,42 +59,42 @@ public class MainController implements ActionListener {
 			}
 
 			if (option != null) {
-				final String time = getTimeSelected();
+				final String timeSeconds = getTimeSelectedInSeconds();
 
-				runSelectedAction(option, time);
+				runSelectedAction(option, timeSeconds);
 			}
-		} else if (src == mainView.mainPanel.cancelButton) {
-			powerManage.cancel();
+		} else if (src == mainFrame.mainPanel.cancelButton) {
+			PowerManager.cancel();
 		}
 	}
 
-	private void runSelectedAction(final String option, String time) {
-		if (time.contentEquals("0")) {
-			time = "10";
+	private void runSelectedAction(final String option, String timeSeconds) {
+		if (timeSeconds.contentEquals("0")) {
+			timeSeconds = "10";
 		}
 
 		switch (option) {
 		case "poweroff":
-			powerManage.powerOff(time);
+			PowerManager.powerOff(timeSeconds);
 			break;
 		case "restart":
-			powerManage.restart(time);
+			PowerManager.restart(timeSeconds);
 			break;
 		case "sleep":
-			powerManage.sleep(time);
+			PowerManager.sleep(timeSeconds);
 			break;
 		case "lock":
-			powerManage.lock(time);
+			PowerManager.lock(timeSeconds);
 			break;
 		default:
 			break;
 		}
 	}
 
-	private String getTimeSelected() {
-		final int hours = Integer.parseInt(mainView.mainPanel.getjSpinner_count_h()) * 3600;
-		final int minutes = Integer.parseInt(mainView.mainPanel.getjSpinner_count_m()) * 60;
-		final int seconds = Integer.parseInt(mainView.mainPanel.getjSpinner_count_s());
+	private String getTimeSelectedInSeconds() {
+		final int hours = Integer.parseInt(mainFrame.mainPanel.getjSpinner_count_h()) * 3600;
+		final int minutes = Integer.parseInt(mainFrame.mainPanel.getjSpinner_count_m()) * 60;
+		final int seconds = Integer.parseInt(mainFrame.mainPanel.getjSpinner_count_s());
 
 		return String.valueOf(hours + minutes + seconds);
 	}

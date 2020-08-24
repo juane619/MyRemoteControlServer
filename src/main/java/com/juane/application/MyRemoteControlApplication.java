@@ -6,7 +6,6 @@
 package com.juane.application;
 
 import com.juane.controller.MainController;
-import com.juane.model.PowerManager;
 import com.juane.view.MainFrame;
 
 /**
@@ -20,8 +19,7 @@ public class MyRemoteControlApplication {
 	 */
 	public static void main(final String[] args) {
 		final MainFrame mainFrame = new MainFrame();
-		final PowerManager powerManage = new PowerManager();
-		final MainController mainController = new MainController(mainFrame, powerManage);
+		final MainController mainController = new MainController(mainFrame);
 
 		mainController.start();
 

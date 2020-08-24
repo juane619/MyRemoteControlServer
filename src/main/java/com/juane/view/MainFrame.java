@@ -8,7 +8,7 @@ package com.juane.view;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.JOptionPane;
+import com.juane.application.AppProperties;
 
 /**
  *
@@ -54,6 +54,8 @@ public class MainFrame extends javax.swing.JFrame {
 						450, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 33, Short.MAX_VALUE)));
 
 		pack();
+
+		setVersionOnGUI();
 	}// </editor-fold>//GEN-END:initComponents
 
 	public void updateGUIConnected(final String ipAddress, final int port) {
@@ -63,8 +65,8 @@ public class MainFrame extends javax.swing.JFrame {
 		mainPanel.labelServerIP.setText(ipAddress + ":" + port);
 	}
 
-	public void showError(final String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
+	private void setVersionOnGUI() {
+		mainPanel.lblAutorVersion.setText("By juanE " + AppProperties.getProperty(AppProperties.VERSION_PROPERTY));
 	}
 
 	public MainPanel mainPanel;
