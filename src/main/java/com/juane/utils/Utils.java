@@ -13,6 +13,12 @@ public class Utils {
 		return String.valueOf(multiplier * 65535);
 	}
 
+	public static String parseRawBrightnessData(final int rawBrightnessData) {
+		// final float multiplier = (float) (rawBrightnessData * 0.01);
+		// return String.valueOf(multiplier * 65535);
+		return String.valueOf(rawBrightnessData);
+	}
+
 	public static Image getImage(final String pathAndFileName) {
 		final URL url = Thread.currentThread().getContextClassLoader().getResource(pathAndFileName);
 		return Toolkit.getDefaultToolkit().getImage(url);

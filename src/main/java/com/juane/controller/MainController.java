@@ -25,10 +25,11 @@ public class MainController implements ActionListener {
 	private final Logger LOGGER = Logger.getLogger("MainController");
 
 	MainFrame mainFrame;
-	ServerThread serverController;
+	ServerThread serverThread;
 
-	public MainController(final MainFrame mainFrame) {
+	public MainController(final MainFrame mainFrame, ServerThread serverThread) {
 		this.mainFrame = mainFrame;
+		this.serverThread = serverThread;
 	}
 
 	public void start() {
@@ -38,7 +39,7 @@ public class MainController implements ActionListener {
 		mainFrame.mainPanel.cancelButton.addActionListener(this);
 
 		// Start server functions to manage clients connections
-		new ServerThread(mainFrame).start();
+		this.serverThread.start();
 	}
 
 	@Override

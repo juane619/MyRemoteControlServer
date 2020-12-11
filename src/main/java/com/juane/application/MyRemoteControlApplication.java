@@ -6,6 +6,7 @@
 package com.juane.application;
 
 import com.juane.controller.MainController;
+import com.juane.network.ServerThread;
 import com.juane.view.MainFrame;
 
 /**
@@ -19,10 +20,11 @@ public class MyRemoteControlApplication {
 	 */
 	public static void main(final String[] args) {
 		final MainFrame mainFrame = new MainFrame();
-		final MainController mainController = new MainController(mainFrame);
+		ServerThread serverThread = new ServerThread(mainFrame);
+
+		final MainController mainController = new MainController(mainFrame, serverThread);
 
 		mainController.start();
-
 		mainFrame.setVisible(true);
 	}
 

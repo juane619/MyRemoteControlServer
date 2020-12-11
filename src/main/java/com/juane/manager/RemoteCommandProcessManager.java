@@ -27,46 +27,40 @@ public class RemoteCommandProcessManager {
 		os = System.getProperty("os.name").toLowerCase();
 	}
 
-	public static void processCommand(final int messageType, final String dataReceived) {
+	public static void readCommand(final int messageType, final String dataReceived) {
 		switch (messageType) {
 		case MessagesType.VOLUME_MESSAGE:
 			final String volume = dataReceived;
 
 			final String realVolume = Utils.parseRawVolumeData(Integer.valueOf(volume));
 
-			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-					RemoteConstants.SYSVOLUME_COMMAND, realVolume);
+			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.SYSVOLUME_COMMAND, realVolume);
 
 			break;
 		case MessagesType.KEYLEFT_MESSAGE:
 			resetMultiplierBackwardForward();
-			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-					RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.LEFT_KEY_PARAM);
+			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.LEFT_KEY_PARAM);
 			break;
 		case MessagesType.KEYRIGHT_MESSAGE:
 			resetMultiplierBackwardForward();
-			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-					RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.RIGHT_KEY_PARAM);
+			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.RIGHT_KEY_PARAM);
 			break;
 		case MessagesType.KEYLEFT_LONG_MESSAGE:
 			times = calculateTimesKeysDown();
 			do {
 				times--;
-				RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-						RemoteConstants.SENDKEY_COMMAND, RemoteConstants.LEFT_KEY_PARAM, RemoteConstants.DOWN_PARAM);
+				RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.SENDKEY_COMMAND, RemoteConstants.LEFT_KEY_PARAM, RemoteConstants.DOWN_PARAM);
 			} while (times > 0);
 			break;
 		case MessagesType.KEYRIGHT_LONG_MESSAGE:
 			times = calculateTimesKeysDown();
 			do {
 				times--;
-				RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-						RemoteConstants.SENDKEY_COMMAND, RemoteConstants.RIGHT_KEY_PARAM, RemoteConstants.DOWN_PARAM);
+				RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.SENDKEY_COMMAND, RemoteConstants.RIGHT_KEY_PARAM, RemoteConstants.DOWN_PARAM);
 			} while (times > 0);
 			break;
 		case MessagesType.KEYSPACE_MESSAGE:
-			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND,
-					RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.SPC_KEY_PARAM);
+			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.KEYPRESS_COMMAND, RemoteConstants.SPC_KEY_PARAM);
 			break;
 		case MessagesType.POWER_OFF_MESSAGE:
 			final String secondsToPower = String.valueOf(Long.valueOf(dataReceived) / 1000);
@@ -78,6 +72,12 @@ public class RemoteCommandProcessManager {
 			break;
 		case MessagesType.CANCEL_POWER_ACTION_MESSAGE:
 			PowerManager.cancel();
+			break;
+		case MessagesType.BRIGTHNESS_MESSAGE:
+			final String brithness = dataReceived;
+			final String brithnessToApply = Utils.parseRawBrightnessData(Integer.valueOf(brithness));
+
+			RemoteCommandProcessManager.processCommand(RemoteConstants.EXTERN_TOOL_COMMAND, RemoteConstants.CHANGEBRIGHTNESS_COMMAND, brithnessToApply);
 			break;
 		default:
 			break;

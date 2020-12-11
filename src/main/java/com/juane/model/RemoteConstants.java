@@ -11,10 +11,12 @@ public class RemoteConstants {
 	// commands
 	public static final String EXTERN_TOOL_COMMAND = "nircmdc.exe";
 	public static final String SYSVOLUME_COMMAND = "setsysvolume";
+	public static final String CHANGEBRIGHTNESS_COMMAND = "setbrightness";
 	public static final String KEYPRESS_COMMAND = "sendkeypress";
 	public static final String SENDKEY_COMMAND = "sendkey";
 	public static final String CMD_COMMAND = "cmd";
 	public static final String BASH_COMMAND = "bash";
+	public static final String BRIGTHNESS_COMMAND = "sendkeypress";
 
 	// commands parameters
 	public static final String LEFT_KEY_PARAM = "left";

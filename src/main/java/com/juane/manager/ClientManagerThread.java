@@ -74,7 +74,7 @@ public class ClientManagerThread extends Thread {
 						break;
 					}
 
-					RemoteCommandProcessManager.processCommand(messageType, dataReceived);
+					RemoteCommandProcessManager.readCommand(messageType, dataReceived);
 					// writer.println("Message of type " + messageType + " received.");
 				}
 			} while (connected);
